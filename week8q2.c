@@ -2,7 +2,8 @@
 #include<string.h>
 #include<stdbool.h>
 bool isMatch(char *s, char *p){
-    for(int j=0,i=0;i<strlen(p),j<strlen(s);){
+    int i, j;
+    for(j=0,i=0;i<strlen(p),j<strlen(s);){
         if(s[j]!=p[i]){
             if(p[i+1]=='*') i+=2;
             else if(p[i]=='.'){
@@ -23,6 +24,7 @@ bool isMatch(char *s, char *p){
             }
         }
     }
+    if(j==strlen(s)&&i<strlen(p)&&p[i]!='*') return false;
     return true;
 }
 int main(){
