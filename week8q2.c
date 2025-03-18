@@ -1,36 +1,39 @@
 #include<stdio.h>
+#include<stdlib.h>
 #include<string.h>
 #include<stdbool.h>
-bool isMatch(char *s, char *p){
-    int i, j;
-    for(j=0,i=0;i<strlen(p),j<strlen(s);){
-        if(s[j]!=p[i]){
-            if(p[i+1]=='*') i+=2;
-            else if(p[i]=='.'){
-                    i++;
-                    j++;
-            }
-            else return false;
+bool isMatch(const char *s,const char *p){
+    int n=strlen(s),m=strlen(p);
+    bool **dp=(bool **)malloc((n+1)*sizeof(bool *));
+    for(int i=0;i<=n;i++){
+        dp[i]=(bool *)malloc((m+1)*sizeof(bool));
+    }
+    for(int i=0;i<=n;i++){
+        for(int j=0;j<=m;j++) {
+            dp[i][j]=false;
         }
-        else{
-            if(p[i+1]=='*'){
-                i+=2;
-                while(s[j+1]==s[j]) j++;
-                j++;
+    }
+    dp[0][0]=true;
+    for(int i=0;i<=n;i++){
+        for(int j=1;j<=m;j++){
+            if(p[j-1]=='*'){
+                dp[i][j]=dp[i][j-2]||(i>0&&(s[i-1]==p[j-2]||p[j-2]=='.')&&dp[i-1][j]);
             }
             else{
-                i++;
-                j++;
+                dp[i][j]=i>0&&dp[i-1][j-1]&&(s[i-1]==p[j-1]||p[j-1]=='.');
             }
         }
     }
-    if(j==strlen(s)&&i<strlen(p)&&p[i]!='*') return false;
-    return true;
+    bool result=dp[n][m];
+    for(int i=0;i<=n;i++){
+        free(dp[i]);
+    }
+    free(dp);
+    return result;
 }
 int main(){
-    char s[20], p[20];
-    scanf("%s %s",s,p);
-    char *p1, *p2;
-    p1=s;p2=p;
-    printf("%d",isMatch(p1,p2));
+    char s[100], p[100];
+    scanf("%99s",s);
+    scanf("%99s",p);
+    printf("%d\n",isMatch(s,p)?1:0);
 }
