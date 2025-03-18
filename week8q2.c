@@ -4,9 +4,7 @@
 bool isMatch(char *s, char *p){
     for(int j=0,i=0;i<strlen(p),j<strlen(s);){
         if(s[j]!=p[i]){
-            if(p[i+1]=='*'){
-                    i+=2;
-            }
+            if(p[i+1]=='*') i+=2;
             else if(p[i]=='.'){
                     i++;
                     j++;
@@ -16,9 +14,7 @@ bool isMatch(char *s, char *p){
         else{
             if(p[i+1]=='*'){
                 i+=2;
-                while(s[j+1]==s[j]){
-                    j++;
-                }
+                while(s[j+1]==s[j]) j++;
                 j++;
             }
             else{
