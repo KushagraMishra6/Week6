@@ -1,51 +1,45 @@
 #include<stdio.h>
 #include<string.h>
-char p;
-char ans[402];
-char* ptr=ans;
-long long int power(long long int n,int x){
-    if(x==0) return 1;
-    else if(x>0) return n*power(n,x-1);
+char ans[401], sol[401];
+void reverse(char *num){
+    int n=strlen(num);
+    char rev[401];
+    for(int i=0;i<n;i++) rev[i]=num[n-i-1];
+    for(int i=0;i<n;i++) ans[i]=rev[i];
 }
-void revarr(char *pntr,int n,int i){
-    if(i>=n/2) return;
-    char temp=*(pntr+i);
-    *(pntr+i)=*(pntr+n-1-i);
-    *(pntr+n-1-i)=temp;
-    revarr(pntr,n,i+1);
+void single_num(char *num1,char *num2,int t,char *ans){
+    int n1=strlen(num1), n2=strlen(num2);
+    if(t==n2) return;
+    int carry=0, i=0;
+    while(i<n1){
+        int res=(ans[i+t]-'0')+(num1[n1-i-1]-'0')*(num2[n2-t-1]-'0')+carry;
+        if(res>9){
+            ans[i+t]=(res%10)+'0';
+            carry=res/10;
+        }
+        else{
+            ans[i+t]=res+'0';
+            carry=0;
+        }
+        i++;
+    }
+    if(carry) ans[i+t]=carry+'0';
+    single_num(num1,num2,t+1,ans);
 }
-char* multiply(char* num1, char* num2){
-    if((*num1=='0')||(*num2=='0')){
-        p='0';
-        return &p;
-    }
-    else{
-        long long int n1=0, n2=0, s1, s2;
-        s1=strlen(num1);s2=strlen(num2);
-        for(int i=0;i<s1;i++){
-            n1+=power(10,s1-i-1)*((*(num1+i))-'0');
-        }
-        for(int i=0;i<s2;i++){
-            n2+=power(10,s2-i-1)*((*(num2+i))-'0');
-        }
-        long long int prdct=n1*n2;
-        int q=0;
-        while(prdct>0){
-            int a=prdct%10;
-            ans[q]='0'+a;
-            prdct/=10;
-            q++;
-        }
-        ans[q]='\0';
-        revarr(ptr,q,0);
-        return ptr;
-    }
+char *multiply(char *num1,char *num2){
+    for(int i=0;i<401;i++) ans[i]='0';
+    single_num(num1,num2,0,ans);
+    reverse(ans);
+    int i=0;
+    while(ans[i]=='0') i++;
+    sol[401-i];
+    int j=0;
+    while(i<401) sol[j++]=ans[i++];
+    return sol;
 }
 int main(){
-    char num1[200],num2[200];
+    char num1[200], num2[200];
     scanf("%s %s",num1,num2);
-    char *p1, *p2;
-    p1=num1;p2=num2;
-    char* product=multiply(p1,p2);
-    printf("%s",product);
+    char *ans1=multiply(num1,num2);
+    puts(ans1);
 }
