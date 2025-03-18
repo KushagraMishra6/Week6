@@ -6,7 +6,6 @@ bool isMatch(char *s, char *p){
         if(s[j]!=p[i]){
             if(p[i+1]=='*'){
                     i+=2;
-                    j++;
             }
             else if(p[i]=='.'){
                     i++;
